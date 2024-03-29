@@ -3,7 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
-	"html/template"
+	// "html/template"
 	"net/http"
 	"strconv"
 
@@ -13,6 +13,9 @@ import (
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
     w.Header().Add("Server", "Go")
 
+    snippets, err := app.snippets.Latest()
+
+    /*
     files := []string{
         "./ui/html/base.tmpl.html",
         "./ui/html/partials/nav.tmpl.html",
@@ -27,10 +30,15 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
     }
 
     err = ts.ExecuteTemplate(w, "base", nil)
+    */
 
     if err != nil {
         app.serverError(w, r, err)
         return
+    }
+
+    for _, snippet := range snippets {
+        fmt.Fprintf(w, "%+v\n", snippet)
     }
 }
 
